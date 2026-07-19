@@ -5,7 +5,7 @@
 (function () {
   "use strict";
   const MM = (window.MM = window.MM || {});
-  const { $, escapeHtml } = MM;
+  const { $, $$, escapeHtml } = MM;
 
   document.addEventListener("DOMContentLoaded", () => {
     // if already logged in, redirect away
