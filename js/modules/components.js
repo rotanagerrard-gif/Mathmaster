@@ -59,13 +59,33 @@
     { href: "contact.html", label: "Contact", icon: "mail" },
   ];
 
+  // Resolve a logical page reference to the correct relative URL for the
+  // current location. Accepts inputs in any of these forms:
+  //   "index.html", "lessons.html", "profile.html",
+  //   "pages/lessons.html", "admin/dashboard.html", "../index.html"
+  // and returns a path that works from root, /pages/, or /admin/.
   function navHref(file) {
     const path = location.pathname;
     const inPages = path.includes("/pages/");
     const inAdmin = path.includes("/admin/");
-    if (file === "index.html") return inPages || inAdmin ? "../index.html" : "index.html";
-    if (file === "404.html") return "404.html";
-    return inPages ? file : inAdmin ? "../pages/" + file.replace("pages/", "") : "pages/" + file;
+    const here = inPages ? "pages" : inAdmin ? "admin" : "root";
+
+    // Normalize input: strip leading "../" and any "pages/" or "admin/" prefix
+    let f = String(file).replace(/^(\.\.?\/)+/, "");
+    if (f.startsWith("pages/")) f = f.slice(6);
+    if (f.startsWith("admin/")) f = f.slice(6);
+
+    // Special root-level files
+    if (f === "index.html") return here === "root" ? "index.html" : "../index.html";
+    if (f === "404.html") return here === "root" ? "404.html" : "../404.html";
+
+    // admin/dashboard.html
+    if (f === "dashboard.html" || file.startsWith("admin/")) {
+      return here === "admin" ? "dashboard.html" : here === "pages" ? "../admin/dashboard.html" : "admin/dashboard.html";
+    }
+
+    // Regular /pages/ files
+    return here === "pages" ? f : here === "admin" ? "../pages/" + f : "pages/" + f;
   }
   MM.navHref = navHref;
 

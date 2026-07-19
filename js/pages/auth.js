@@ -51,7 +51,7 @@
         const res = MM.auth.loginDemo("admin");
         MM.sound.play("success");
         MM.toast("Signed in as Admin Demo", "success");
-        setTimeout(() => (location.href = "profile.html"), 700);
+        setTimeout(() => (location.href = MM.ui.navHref("pages/profile.html")), 700);
       });
       $("#forgotLink")?.addEventListener("click", (e) => {
         e.preventDefault();
