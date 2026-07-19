@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Admin Dashboard — MathMaster</title>
+  <meta name="description" content="Admin dashboard: manage lessons, questions, users, and view analytics." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    /* Admin-only tweaks */
+    .admin-bar { background: linear-gradient(90deg, #f59e0b, #ef4444); color:#fff; padding: 6px 0; text-align:center; font-size: var(--fs-xs); font-weight:700; letter-spacing:.06em; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-loader" role="status" aria-label="Loading"><div class="core"></div><div class="lbl">∑</div></div>
+
+  <div class="admin-bar">🛠 ADMIN MODE · Changes are saved locally on this device</div>
+  <div id="nav-slot"></div>
+
+  <main id="main" class="container section">
+    <div class="page-head">
+      <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Admin</span></div>
+      <h1>🛠 <span class="gradient-text">Admin Dashboard</span></h1>
+      <p class="text-lg">Manage content, users, and platform analytics.</p>
+    </div>
+
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <aside class="admin-side card" style="padding: var(--sp-4);">
+        <a href="#section-overview" class="active" data-admin-nav="overview">📊 Overview</a>
+        <a href="#section-lessons" data-admin-nav="lessons">📚 Lessons</a>
+        <a href="#section-questions" data-admin-nav="questions">❓ Questions</a>
+        <a href="#section-users" data-admin-nav="users">👥 Users</a>
+        <a href="#section-analytics" data-admin-nav="analytics">📈 Analytics</a>
+        <a href="#section-content" data-admin-nav="content">✏️ Edit Content</a>
+        <a href="#section-media" data-admin-nav="media">🖼️ Media</a>
+        <hr style="border:none;border-top:1px solid var(--border);margin:var(--sp-3) 0;">
+        <a href="../index.html">↩ Back to Site</a>
+      </aside>
+
+      <!-- Content -->
+      <div id="adminContent">
+        <!-- OVERVIEW -->
+        <section id="section-overview" class="admin-section">
+          <h2 class="mb-4">📊 Overview</h2>
+          <div class="admin-stat-grid mb-5" id="overviewStats"></div>
+          <div class="grid grid-2">
+            <div class="card">
+              <h3 class="mb-3">🚀 Quick Actions</h3>
+              <div class="flex-col gap-2">
+                <button class="btn btn-ghost btn-block" data-admin-action="add-lesson">➕ Add New Lesson</button>
+                <button class="btn btn-ghost btn-block" data-admin-action="add-question">➕ Add New Question</button>
+                <button class="btn btn-ghost btn-block" data-admin-action="seed-demo">🎲 Seed Demo Content</button>
+                <button class="btn btn-outline btn-block" data-admin-action="export">⬇ Export All Data</button>
+              </div>
+            </div>
+            <div class="card">
+              <h3 class="mb-3">🔔 Platform Status</h3>
+              <div class="flex-col gap-3" id="statusList"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LESSONS -->
+        <section id="section-lessons" class="admin-section hidden">
+          <div class="flex items-center justify-between wrap gap-3 mb-4">
+            <h2>📚 Manage Lessons</h2>
+            <div class="flex gap-2 wrap">
+              <input type="search" id="lessonSearchInput" class="input" style="width:240px;" placeholder="Search lessons..." />
+              <button class="btn btn-primary" data-admin-action="add-lesson">➕ New Lesson</button>
+            </div>
+          </div>
+          <div class="card" style="padding:0;">
+            <div class="table-wrap" style="border:none;">
+              <table class="data" id="lessonsAdminTable">
+                <thead><tr><th>Title</th><th>Topic</th><th>Difficulty</th><th>Min</th><th>Actions</th></tr></thead>
+                <tbody id="lessonsAdminBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- QUESTIONS -->
+        <section id="section-questions" class="admin-section hidden">
+          <div class="flex items-center justify-between wrap gap-3 mb-4">
+            <h2>❓ Manage Questions</h2>
+            <div class="flex gap-2 wrap">
+              <select id="qTopicFilter" class="select" style="width:auto;"></select>
+              <button class="btn btn-primary" data-admin-action="add-question">➕ New Question</button>
+            </div>
+          </div>
+          <div id="questionsAdminList" class="flex-col gap-3"></div>
+        </section>
+
+        <!-- USERS -->
+        <section id="section-users" class="admin-section hidden">
+          <div class="flex items-center justify-between wrap gap-3 mb-4">
+            <h2>👥 Manage Users</h2>
+            <input type="search" id="userSearchInput" class="input" style="width:240px;" placeholder="Search users..." />
+          </div>
+          <div class="card" style="padding:0;">
+            <div class="table-wrap" style="border:none;">
+              <table class="data">
+                <thead><tr><th>User</th><th>Role</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="usersAdminBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ANALYTICS -->
+        <section id="section-analytics" class="admin-section hidden">
+          <h2 class="mb-4">📈 Analytics</h2>
+          <div class="admin-stat-grid mb-5" id="analyticsStats"></div>
+          <div class="grid grid-2">
+            <div class="card">
+              <h3 class="mb-3">📊 Topic Engagement</h3>
+              <div id="topicEngagement"></div>
+            </div>
+            <div class="card">
+              <h3 class="mb-3">📅 Recent Signups</h3>
+              <div id="recentSignups"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EDIT CONTENT -->
+        <section id="section-content" class="admin-section hidden">
+          <h2 class="mb-4">✏️ Edit Content</h2>
+          <div class="card">
+            <p class="text-sm mb-4">Edit the global site announcement banner that appears across MathMaster.</p>
+            <div class="field">
+              <label for="announcementInput">Announcement Banner Text</label>
+              <input type="text" id="announcementInput" class="input" placeholder="e.g. 🎉 New Probability lessons just added!" />
+            </div>
+            <div class="field">
+              <label for="announcementType">Style</label>
+              <select id="announcementType" class="select" style="width:auto;">
+                <option value="info">Info (blue)</option>
+                <option value="success">Success (green)</option>
+                <option value="warning">Warning (orange)</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="saveAnnouncement">Save Announcement</button>
+          </div>
+
+          <div class="card mt-4">
+            <h3 class="mb-3">🎨 Branding</h3>
+            <div class="field">
+              <label>Site name</label>
+              <input type="text" class="input" id="siteNameInput" placeholder="MathMaster" />
+            </div>
+            <button class="btn btn-primary" id="saveBranding">Save Branding</button>
+          </div>
+        </section>
+
+        <!-- MEDIA -->
+        <section id="section-media" class="admin-section hidden">
+          <h2 class="mb-4">🖼️ Media Library</h2>
+          <div class="card">
+            <p class="text-sm mb-4">Upload images for lessons and content. Images are stored locally in your browser.</p>
+            <div class="field">
+              <label for="mediaUpload">Upload Image</label>
+              <input type="file" id="mediaUpload" class="input" accept="image/*" />
+            </div>
+            <div class="text-xs text-muted">Max recommended size: 1 MB · JPG, PNG, SVG, WebP</div>
+          </div>
+          <div class="grid grid-3 mt-4" id="mediaGrid"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="../js/modules/utils.js"></script>
+  <script src="../js/modules/storage.js"></script>
+  <script src="../js/modules/theme.js"></script>
+  <script src="../js/modules/sound.js"></script>
+  <script src="../js/modules/auth.js"></script>
+  <script src="../js/modules/lessonsData.js"></script>
+  <script src="../js/modules/mathEngine.js"></script>
+  <script src="../js/modules/components.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/pages/admin.js"></script>
+</body>
+</html>

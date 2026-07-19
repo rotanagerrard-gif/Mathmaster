@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Quizzes — MathMaster</title>
+  <meta name="description" content="Take timed math quizzes across all topics, or try the daily challenge for bonus XP." />
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-loader" role="status" aria-label="Loading"><div class="core"></div><div class="lbl">∑</div></div>
+  <div id="nav-slot"></div>
+
+  <main id="main" class="container">
+    <div class="page-head reveal">
+      <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Quizzes</span></div>
+      <h1>Math <span class="gradient-text">Quizzes</span></h1>
+      <p class="text-lg">Timed challenges with fresh random questions. Beat the clock, climb the leaderboard.</p>
+    </div>
+
+    <!-- Quiz setup -->
+    <div id="setupView">
+      <!-- Daily challenge banner -->
+      <div class="card reveal" id="dailyBanner" style="background: var(--brand-grad); color:#fff; border:none; overflow:hidden; position:relative; margin-bottom: var(--sp-5);">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 15%, rgba(255,255,255,.25), transparent 50%);"></div>
+        <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap;">
+          <div>
+            <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;">🗓️ Daily Challenge</span>
+            <h2 style="color:#fff;margin-top:var(--sp-2);">5 Questions · 60 Seconds</h2>
+            <p style="color:rgba(255,255,255,.9);">Fresh every day. Complete it for +60 XP and keep your streak alive!</p>
+          </div>
+          <button class="btn btn-lg" id="startDailyBtn" style="background:#fff;color:var(--brand-2);">Start Today's →</button>
+        </div>
+      </div>
+
+      <!-- Quiz builder -->
+      <div class="card reveal">
+        <h3 style="margin-bottom: var(--sp-4);">Build Your Own Quiz</h3>
+        <div class="field">
+          <label>Topics (select one or more)</label>
+          <div class="chip-row" id="quizTopics"></div>
+        </div>
+        <div class="grid grid-3" style="align-items:end;">
+          <div class="field" style="margin:0;">
+            <label for="quizCount">Number of questions</label>
+            <select id="quizCount" class="select">
+              <option value="5">5 questions</option>
+              <option value="10" selected>10 questions</option>
+              <option value="15">15 questions</option>
+              <option value="20">20 questions</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0;">
+            <label for="quizTime">Time per question</label>
+            <select id="quizTime" class="select">
+              <option value="0">No timer</option>
+              <option value="20">20 seconds</option>
+              <option value="30" selected>30 seconds</option>
+              <option value="45">45 seconds</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0;">
+            <label for="quizMode">Mode</label>
+            <select id="quizMode" class="select">
+              <option value="instant" selected>Instant feedback</option>
+              <option value="exam">Exam mode (feedback at end)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg mt-5" id="startQuizBtn">Start Quiz →</button>
+      </div>
+
+      <!-- Recent quizzes -->
+      <div class="card reveal mt-5">
+        <h3 style="margin-bottom: var(--sp-4);">📊 Your Quiz History</h3>
+        <div id="quizHistory"></div>
+      </div>
+    </div>
+
+    <!-- Quiz running view -->
+    <div id="quizView" class="hidden"></div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="../js/modules/utils.js"></script>
+  <script src="../js/modules/storage.js"></script>
+  <script src="../js/modules/theme.js"></script>
+  <script src="../js/modules/sound.js"></script>
+  <script src="../js/modules/auth.js"></script>
+  <script src="../js/modules/lessonsData.js"></script>
+  <script src="../js/modules/mathEngine.js"></script>
+  <script src="../js/modules/components.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/pages/quizzes.js"></script>
+</body>
+</html>

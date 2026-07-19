@@ -1,0 +1,68 @@
+/* ===================================================================
+   MathMaster — Responsive
+   Breakpoints: 1024 / 768 / 560
+   =================================================================== */
+
+/* Large desktop down */
+@media (max-width: 1024px) {
+  :root { --fs-4xl: 2.8rem; --fs-3xl: 2.1rem; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-visual { min-height: 360px; order: -1; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Tablet */
+@media (max-width: 860px) {
+  .nav-links { display: none; }
+  .nav-search { display: none; }
+  .nav-toggle {
+    display: inline-grid; place-items: center;
+    width: 42px; height: 42px; border-radius: var(--radius-pill);
+    background: var(--glass); border: 1px solid var(--glass-border);
+  }
+  .nav-toggle .bars, .nav-toggle .bars::before, .nav-toggle .bars::after {
+    content: ""; display: block; width: 20px; height: 2px; background: var(--text);
+    transition: transform var(--t), opacity var(--t);
+  }
+  .nav-toggle .bars { position: relative; }
+  .nav-toggle .bars::before { position: absolute; top: -6px; }
+  .nav-toggle .bars::after { position: absolute; top: 6px; }
+  .nav-toggle.open .bars { background: transparent; }
+  .nav-toggle.open .bars::before { transform: translateY(6px) rotate(45deg); }
+  .nav-toggle.open .bars::after { transform: translateY(-6px) rotate(-45deg); }
+
+  .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .admin-layout { grid-template-columns: 1fr; }
+  .admin-side { position: static; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .admin-side a { margin: 0; }
+  .quiz-top { flex-wrap: wrap; gap: var(--sp-3); }
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+  :root { --fs-4xl: 2.2rem; --fs-3xl: 1.8rem; --fs-2xl: 1.5rem; }
+  .container { padding-inline: 0; }
+  body { padding-inline: var(--sp-3); }
+  .hero { padding: var(--sp-6) 0; }
+  .hero-stats { gap: var(--sp-4); }
+  .hero-stats .stat .num { font-size: var(--fs-xl); }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .float-card { padding: var(--sp-3); }
+  .float-card .eq { font-size: var(--fs-base); }
+  .toast-stack { left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-4); max-width: none; }
+  .modal { width: 100%; }
+  .quiz-q { font-size: var(--fs-lg); }
+  .option { padding: var(--sp-3); }
+  .section { padding: var(--sp-6) 0; }
+  .nav-actions .xp-pill { display: none; }
+  .heatmap { grid-template-columns: repeat(13, 1fr); }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  :root { --fs-4xl: 1.9rem; }
+  .hero-cta .btn { width: 100%; }
+}

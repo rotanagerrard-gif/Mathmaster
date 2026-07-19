@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>404 — Page Not Found · MathMaster</title>
+  <meta name="description" content="The page you're looking for doesn't exist. Let's get you back on track." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-loader" role="status" aria-label="Loading"><div class="core"></div><div class="lbl">∑</div></div>
+  <div id="nav-slot"></div>
+
+  <main id="main" class="container">
+    <div class="notfound">
+      <div class="big">404</div>
+      <h2 class="mt-3">This page doesn't add up.</h2>
+      <p>The page you're looking for may have been moved, deleted, or never existed. But don't worry — there's plenty more math to explore.</p>
+      <div class="flex gap-3 justify-center wrap mt-5">
+        <a href="index.html" class="btn btn-primary btn-lg">🏠 Back to Home</a>
+        <a href="pages/lessons.html" class="btn btn-ghost btn-lg">📚 Browse Lessons</a>
+      </div>
+      <div class="mt-6 flex gap-3 justify-center wrap">
+        <a href="pages/exercises.html" class="btn btn-outline btn-sm">Practice Exercises</a>
+        <a href="pages/quizzes.html" class="btn btn-outline btn-sm">Take a Quiz</a>
+        <a href="pages/contact.html" class="btn btn-outline btn-sm">Report a Problem</a>
+      </div>
+
+      <!-- Fun math equation -->
+      <div class="card mt-6" style="max-width:420px;margin-inline:auto;background:var(--brand-grad-soft);">
+        <p class="text-sm"><strong>While you're here, a riddle:</strong></p>
+        <div class="formula" style="background:transparent;border:none;font-size:var(--fs-xl);text-align:center;margin:var(--sp-2) 0;">∫ 404 dx = ?</div>
+        <p class="text-xs text-muted text-center">Hint: integration adds one to the exponent and divides.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="js/modules/utils.js"></script>
+  <script src="js/modules/storage.js"></script>
+  <script src="js/modules/theme.js"></script>
+  <script src="js/modules/sound.js"></script>
+  <script src="js/modules/auth.js"></script>
+  <script src="js/modules/lessonsData.js"></script>
+  <script src="js/modules/mathEngine.js"></script>
+  <script src="js/modules/components.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

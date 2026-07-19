@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Sign In — MathMaster</title>
+  <meta name="description" content="Sign in to MathMaster to track your progress, streaks, and achievements." />
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-loader" role="status" aria-label="Loading"><div class="core"></div><div class="lbl">∑</div></div>
+  <div id="nav-slot"></div>
+
+  <main id="main">
+    <div class="auth-wrap container">
+      <div class="auth-card card reveal">
+        <div class="head">
+          <div class="logo brand">∑</div>
+          <h1>Welcome back</h1>
+          <p>Sign in to continue your math journey.</p>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="email">Email</label>
+            <div class="input-group">
+              <span class="icon" id="emailIcon"></span>
+              <input type="email" id="email" class="input" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+            <div class="field-error" id="emailErr"></div>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-group">
+              <span class="icon" id="passIcon"></span>
+              <input type="password" id="password" class="input" placeholder="••••••••" autocomplete="current-password" required />
+            </div>
+            <div class="field-error" id="passErr"></div>
+          </div>
+          <div class="flex items-center justify-between mt-2">
+            <label class="checkbox"><input type="checkbox" id="remember" checked /> Remember me</label>
+            <a href="#" class="text-sm" style="color: var(--brand-1);" id="forgotLink">Forgot password?</a>
+          </div>
+          <div class="field-error" id="formErr" style="text-align:center;"></div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg mt-4">Sign In →</button>
+        </form>
+
+        <div class="divider">or</div>
+        <button class="btn btn-ghost btn-block" id="demoBtn">🚀 Continue as Demo Student</button>
+        <button class="btn btn-outline btn-block mt-2" id="demoAdminBtn">🛠 Try Admin Demo</button>
+
+        <div class="auth-alt">Don't have an account? <a href="register.html">Create one</a></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="../js/modules/utils.js"></script>
+  <script src="../js/modules/storage.js"></script>
+  <script src="../js/modules/theme.js"></script>
+  <script src="../js/modules/sound.js"></script>
+  <script src="../js/modules/auth.js"></script>
+  <script src="../js/modules/lessonsData.js"></script>
+  <script src="../js/modules/mathEngine.js"></script>
+  <script src="../js/modules/components.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/pages/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Lessons — MathMaster</title>
+  <meta name="description" content="Browse all MathMaster lessons across 13 math topics, from arithmetic to probability. Bookmark and track your progress." />
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-loader" role="status" aria-label="Loading"><div class="core"></div><div class="lbl">∑</div></div>
+  <div id="nav-slot"></div>
+
+  <main id="main" class="container">
+    <div class="page-head reveal">
+      <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Lessons</span></div>
+      <h1>Math <span class="gradient-text">Lessons</span></h1>
+      <p class="text-lg" style="max-width:620px;">Explore structured lessons across 13 topics. Filter, search, and track your progress as you go.</p>
+    </div>
+
+    <!-- Search + filters -->
+    <div class="card reveal" style="margin-bottom: var(--sp-5);">
+      <div class="input-group">
+        <span class="icon" id="searchIconSlot"></span>
+        <input type="search" id="lessonSearch" class="input" placeholder="Search lessons by name, topic, or keyword…" aria-label="Search lessons" />
+      </div>
+      <div class="chip-row mt-4" id="topicChips" role="tablist" aria-label="Filter by topic"></div>
+      <div class="flex gap-3 wrap mt-3">
+        <button class="chip" id="bookmarkFilter">🔖 Bookmarked only</button>
+        <button class="chip" id="completedFilter">✓ Completed only</button>
+        <button class="chip" id="resetFilters">Reset</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="lessonsResults"></div>
+    <div id="emptyState" class="empty hidden">
+      <div class="ic">🔍</div>
+      <h3>No lessons found</h3>
+      <p>Try a different search term or clear your filters.</p>
+    </div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="../js/modules/utils.js"></script>
+  <script src="../js/modules/storage.js"></script>
+  <script src="../js/modules/theme.js"></script>
+  <script src="../js/modules/sound.js"></script>
+  <script src="../js/modules/auth.js"></script>
+  <script src="../js/modules/lessonsData.js"></script>
+  <script src="../js/modules/mathEngine.js"></script>
+  <script src="../js/modules/components.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/pages/lessons.js"></script>
+</body>
+</html>

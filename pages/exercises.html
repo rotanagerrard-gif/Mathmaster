@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Exercises — MathMaster</title>
+  <meta name="description" content="Unlimited practice questions across every math topic, with instant feedback and full step-by-step solutions." />
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-loader" role="status" aria-label="Loading"><div class="core"></div><div class="lbl">∑</div></div>
+  <div id="nav-slot"></div>
+
+  <main id="main" class="container">
+    <div class="page-head reveal">
+      <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Exercises</span></div>
+      <h1>Practice <span class="gradient-text">Exercises</span></h1>
+      <p class="text-lg">Endless fresh questions. Pick a topic, solve, and get instant feedback with full solutions.</p>
+    </div>
+
+    <!-- Setup card -->
+    <div class="card reveal" id="setupCard">
+      <div class="grid grid-3" style="align-items: end;">
+        <div class="field" style="margin:0;">
+          <label for="topicSelect">Topic</label>
+          <select id="topicSelect" class="select"></select>
+        </div>
+        <div class="field" style="margin:0;">
+          <label for="countSelect">Questions</label>
+          <select id="countSelect" class="select">
+            <option value="5">5 questions</option>
+            <option value="10" selected>10 questions</option>
+            <option value="15">15 questions</option>
+            <option value="20">20 questions</option>
+          </select>
+        </div>
+        <div class="field" style="margin:0;">
+          <label for="diffSelect">Difficulty</label>
+          <select id="diffSelect" class="select">
+            <option value="normal" selected>Normal</option>
+            <option value="timed">Timed (no solution reveal)</option>
+            <option value="speed">Speed drill (60s)</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex gap-3 wrap mt-4">
+        <button class="btn btn-primary btn-lg" id="startBtn">Start Practice →</button>
+        <button class="btn btn-ghost" id="surpriseBtn">🎲 Surprise me</button>
+      </div>
+      <p class="text-xs text-muted mt-3">Tip: press <span class="kbd">Enter</span> to submit, <span class="kbd">N</span> for next question.</p>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="grid grid-4 mt-5" id="statsStrip" style="display:none;">
+      <div class="card stat-card"><div class="ic">📝</div><div class="num" id="statAns">0</div><div class="lbl">Answered</div></div>
+      <div class="card stat-card"><div class="ic">✅</div><div class="num gradient-text" id="statCorrect">0</div><div class="lbl">Correct</div></div>
+      <div class="card stat-card"><div class="ic">🎯</div><div class="num" id="statAcc">0%</div><div class="lbl">Accuracy</div></div>
+      <div class="card stat-card"><div class="ic">⏱</div><div class="num" id="statTime">0:00</div><div class="lbl">Elapsed</div></div>
+    </div>
+
+    <!-- Question area -->
+    <div id="questionArea" class="mt-5"></div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="../js/modules/utils.js"></script>
+  <script src="../js/modules/storage.js"></script>
+  <script src="../js/modules/theme.js"></script>
+  <script src="../js/modules/sound.js"></script>
+  <script src="../js/modules/auth.js"></script>
+  <script src="../js/modules/lessonsData.js"></script>
+  <script src="../js/modules/mathEngine.js"></script>
+  <script src="../js/modules/components.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/pages/exercises.js"></script>
+</body>
+</html>

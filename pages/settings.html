@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Settings — MathMaster</title>
+  <meta name="description" content="Manage your MathMaster preferences: theme, sound, difficulty, and data." />
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-loader" role="status" aria-label="Loading"><div class="core"></div><div class="lbl">∑</div></div>
+  <div id="nav-slot"></div>
+
+  <main id="main" class="container">
+    <div class="page-head reveal">
+      <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span>Settings</span></div>
+      <h1>⚙️ <span class="gradient-text">Settings</span></h1>
+      <p class="text-lg">Customize MathMaster to fit your learning style.</p>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1fr; gap: var(--sp-5); max-width: 760px;">
+
+      <!-- Appearance -->
+      <section class="card reveal">
+        <h3 style="margin-bottom: var(--sp-4);">🎨 Appearance</h3>
+        <div class="flex items-center justify-between wrap gap-3" style="padding: var(--sp-3) 0; border-bottom: 1px solid var(--border);">
+          <div>
+            <strong>Theme</strong>
+            <div class="text-xs text-muted">Choose light, dark, or follow your system.</div>
+          </div>
+          <div class="chip-row" style="margin:0;">
+            <button class="chip" data-theme-set="light">☀️ Light</button>
+            <button class="chip" data-theme-set="dark">🌙 Dark</button>
+            <button class="chip" data-theme-set="auto">🖥 Auto</button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between wrap gap-3 mt-4">
+          <div>
+            <strong>Reduce motion</strong>
+            <div class="text-xs text-muted">Minimize animations and transitions.</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="reduceMotion" /><span class="slider"></span></label>
+        </div>
+      </section>
+
+      <!-- Audio -->
+      <section class="card reveal">
+        <h3 style="margin-bottom: var(--sp-4);">🔊 Audio</h3>
+        <div class="flex items-center justify-between wrap gap-3">
+          <div>
+            <strong>Sound effects</strong>
+            <div class="text-xs text-muted">Clicks, correct/wrong feedback, fanfare.</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="soundToggle" /><span class="slider"></span></label>
+        </div>
+        <div class="flex gap-2 wrap mt-4">
+          <button class="btn btn-ghost btn-sm" data-sfx="correct">▶ Correct</button>
+          <button class="btn btn-ghost btn-sm" data-sfx="wrong">▶ Wrong</button>
+          <button class="btn btn-ghost btn-sm" data-sfx="success">▶ Success</button>
+          <button class="btn btn-ghost btn-sm" data-sfx="levelup">▶ Level up</button>
+        </div>
+      </section>
+
+      <!-- Learning -->
+      <section class="card reveal">
+        <h3 style="margin-bottom: var(--sp-4);">🎓 Learning</h3>
+        <div class="flex items-center justify-between wrap gap-3">
+          <div>
+            <strong>Default difficulty</strong>
+            <div class="text-xs text-muted">Affects suggested quiz settings.</div>
+          </div>
+          <select id="diffSelect" class="select" style="width:auto;">
+            <option value="easy">Easy</option>
+            <option value="normal">Normal</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between wrap gap-3 mt-4" style="border-top: 1px solid var(--border); padding-top: var(--sp-4);">
+          <div>
+            <strong>Language</strong>
+            <div class="text-xs text-muted">Interface language (demo — English only for now).</div>
+          </div>
+          <select id="langSelect" class="select" style="width:auto;">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Account -->
+      <section class="card reveal">
+        <h3 style="margin-bottom: var(--sp-4);">👤 Account</h3>
+        <div id="accountInfo"></div>
+        <div class="flex gap-2 wrap mt-4">
+          <button class="btn btn-outline btn-sm" id="exportBtn">⬇ Export my data</button>
+          <button class="btn btn-danger btn-sm" id="resetBtn">🗑 Reset all data</button>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn">↩ Sign out</button>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="card reveal center">
+        <div class="brand" style="justify-content:center;margin-bottom: var(--sp-2);"><span class="logo">∑</span><span>Math<span class="gradient-text">Master</span></span></div>
+        <p class="text-sm">Version 1.0.0 · Built with ❤️ for math learners everywhere.</p>
+        <div class="flex gap-2 justify-center wrap mt-3">
+          <a class="text-sm" href="about.html" style="color: var(--brand-1);">About</a> ·
+          <a class="text-sm" href="contact.html" style="color: var(--brand-1);">Contact</a> ·
+          <a class="text-sm" href="#" style="color: var(--brand-1);">Privacy</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="../js/modules/utils.js"></script>
+  <script src="../js/modules/storage.js"></script>
+  <script src="../js/modules/theme.js"></script>
+  <script src="../js/modules/sound.js"></script>
+  <script src="../js/modules/auth.js"></script>
+  <script src="../js/modules/lessonsData.js"></script>
+  <script src="../js/modules/mathEngine.js"></script>
+  <script src="../js/modules/components.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/pages/settings.js"></script>
+</body>
+</html>
