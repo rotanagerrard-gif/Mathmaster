@@ -10,6 +10,9 @@
   document.addEventListener("DOMContentLoaded", () => {
     const s = MM.store.settings;
 
+    // Apply i18n to page labels
+    if (MM.i18n) MM.i18n.applyPageI18n();
+
     // theme chips
     function setThemeActive() {
       $$("[data-theme-set]").forEach((c) => {
@@ -49,18 +52,23 @@
     diff.value = s.difficulty || "normal";
     diff.addEventListener("change", () => MM.store.setSettings({ difficulty: diff.value }));
 
-    // language
+    // language — English + Khmer
     const lang = $("#langSelect");
     lang.value = s.language || "en";
     lang.addEventListener("change", () => {
-      MM.store.setSettings({ language: lang.value });
-      MM.toast("Language preference saved (demo)", "info", 1500);
+      const val = lang.value;
+      if (MM.i18n) MM.i18n.setLang(val);
+      else MM.store.setSettings({ language: val });
+      const msg = val === "km"
+        ? (MM.t ? MM.t("settings.lang.saved") : "Language changed to Khmer")
+        : (MM.t ? MM.t("settings.lang.saved.en") : "Language changed to English");
+      MM.toast(msg, "success", 1800);
+      setTimeout(() => location.reload(), 700);
     });
 
     // sfx preview
     $$("[data-sfx]").forEach((b) => {
       b.addEventListener("click", () => {
-        // enable temporarily for preview
         const was = MM.store.settings.sound;
         MM.store.setSettings({ sound: true });
         MM.sound.play(b.dataset.sfx);
@@ -82,13 +90,14 @@
           </div>
         </div>`;
     } else {
-      acct.innerHTML = `<p class="text-muted">Not signed in. <a href="login.html" style="color:var(--brand-1);">Sign in</a></p>`;
+      const signInLabel = MM.t ? MM.t("nav.signin") : "Sign in";
+      acct.innerHTML = `<p class="text-muted">Not signed in. <a href="login.html" style="color:var(--brand-1);">${signInLabel}</a></p>`;
     }
 
     // export
     $("#exportBtn").addEventListener("click", () => {
       MM.downloadJSON(JSON.parse(MM.store.export()), "mathmaster-data.json");
-      MM.toast("Data exported ✓", "success");
+      MM.toast("Data exported \u2713", "success");
     });
 
     // reset
@@ -108,7 +117,12 @@
     // logout
     $("#logoutBtn").addEventListener("click", async () => {
       if (!MM.auth.isLoggedIn()) return;
-      const ok = await MM.ui.confirm({ title: "Sign out?", message: "You'll need to sign in again to access your progress.", confirmText: "Sign out", danger: true });
+      const ok = await MM.ui.confirm({
+        title: "Sign out?",
+        message: "You'll need to sign in again to access your progress.",
+        confirmText: MM.t ? MM.t("settings.signout") : "Sign out",
+        danger: true,
+      });
       if (ok) {
         MM.auth.logout();
         MM.toast("Signed out.", "info");
