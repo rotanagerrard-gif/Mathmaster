@@ -45,6 +45,69 @@
     });
   }
 
+  /** Resolve path to i18n.js from root / pages / admin */
+  function i18nSrc() {
+    const p = location.pathname;
+    if (p.includes("/pages/") || p.includes("/admin/")) return "../js/modules/i18n.js";
+    return "js/modules/i18n.js";
+  }
+
+  /** Dynamically load i18n if not already present */
+  function ensureI18n(cb) {
+    if (MM.t && MM.i18n) { cb(); return; }
+    const s = document.createElement("script");
+    s.src = i18nSrc();
+    s.onload = () => cb();
+    s.onerror = () => cb();
+    document.head.appendChild(s);
+  }
+
+  /** Translate hard-coded English chrome (nav, footer, buttons) */
+  function localizeChrome() {
+    if (!MM.t || !MM.i18n) return;
+    const lang = MM.i18n.currentLang();
+    document.documentElement.lang = lang === "km" ? "km" : "en";
+    if (lang !== "km") return;
+
+    const map = {
+      "Home": MM.t("nav.home"),
+      "Lessons": MM.t("nav.lessons"),
+      "Exercises": MM.t("nav.exercises"),
+      "Quizzes": MM.t("nav.quizzes"),
+      "Leaderboard": MM.t("nav.leaderboard"),
+      "Progress": MM.t("nav.progress"),
+      "About": MM.t("nav.about"),
+      "Contact": MM.t("nav.contact"),
+      "Profile": MM.t("nav.profile"),
+      "Settings": MM.t("nav.settings"),
+      "Admin": MM.t("nav.admin"),
+      "Sign in": MM.t("nav.signin"),
+      "Sign up": MM.t("nav.signup"),
+      "Learn": MM.t("footer.learn"),
+      "Account": MM.t("footer.account"),
+      "Company": MM.t("footer.company"),
+    };
+
+    document.querySelectorAll(
+      ".nav-links a, .mobile-drawer a, .footer a, .footer h4, .btn-ghost.btn-sm"
+    ).forEach((el) => {
+      const txt = el.textContent.trim();
+      if (map[txt]) el.textContent = map[txt];
+    });
+
+    const search = document.getElementById("navSearchInput");
+    if (search) {
+      search.placeholder = MM.t("nav.search");
+      search.setAttribute("aria-label", MM.t("nav.search"));
+    }
+
+    // Footer tagline paragraph (first p inside footer brand column)
+    const tagline = document.querySelector(".footer-grid > div > p");
+    if (tagline) tagline.textContent = MM.t("footer.tagline");
+
+    MM.i18n.applyPageI18n();
+  }
+
   function initGlobal() {
     // restore session
     MM.auth.restore();
@@ -56,6 +119,8 @@
     MM.ui.mount(pageName());
     // bind UI sound effects
     MM.sound.bindUI();
+    // localize UI if Khmer selected
+    ensureI18n(() => localizeChrome());
     // hide page loader
     window.addEventListener("load", () => MM.ui.hidePageLoader());
     // safety: hide loader after 2.5s no matter what
@@ -80,5 +145,5 @@
     initGlobal();
   }
 
-  MM.app = { pageName, initGlobal, seedDemo };
+  MM.app = { pageName, initGlobal, seedDemo, localizeChrome, ensureI18n };
 })();
