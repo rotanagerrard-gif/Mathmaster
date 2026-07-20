@@ -12,7 +12,6 @@
       MM.ui && typeof MM.ui.navHref === "function"
         ? MM.ui.navHref("pages/profile.html")
         : "profile.html";
-    // replace() so Back doesn't return to the auth form
     window.location.replace(dest);
   }
 
@@ -36,14 +35,12 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    // if already logged in, redirect away
     if (MM.auth && MM.auth.isLoggedIn()) {
       safeToast("You're already signed in.", "info", 1500);
       setTimeout(goToProfile, 500);
       return;
     }
 
-    // icons (optional)
     try {
       const ei = $("#emailIcon");
       if (ei && MM.icon) ei.innerHTML = MM.icon("mail");
@@ -117,7 +114,6 @@
 
     /* ---------- REGISTER ---------- */
     if (registerForm) {
-      // password strength meter
       const pw = $("#password");
       const bar = $("#strengthBar");
       const txt = $("#strengthTxt");
@@ -137,20 +133,20 @@
           if (/\d/.test(v)) score++;
           if (/[^A-Za-z0-9]/.test(v)) score++;
           const pct = (score / 5) * 100;
+          const colors = [
+            "var(--danger)",
+            "var(--danger)",
+            "var(--warning)",
+            "var(--warning)",
+            "var(--success)",
+            "var(--success)",
+          ];
+          const labels = ["Very weak", "Weak", "Okay", "Good", "Strong", "Excellent"];
           const fill = bar.querySelector(".bar");
           if (fill) {
             fill.style.width = pct + "%";
-            const colors = [
-              "var(--danger)",
-              "var(--danger)",
-              "var(--warning)",
-              "var(--warning)",
-              "var(--success)",
-              "var(--success)",
-            ];
             fill.style.background = colors[score];
           }
-          const labels = ["Very weak", "Weak", "Okay", "Good", "Strong", "Excellent"];
           txt.textContent = labels[score];
           txt.style.color = colors[score];
         });
@@ -200,13 +196,10 @@
           return;
         }
 
-        // SUCCESS: session already set inside MM.auth.register()
-        // UI effects are optional — never block redirect
+        // SUCCESS — session already set inside MM.auth.register()
         safePlay("success");
         safeConfetti(80);
         safeToast(`Welcome to MathMaster, ${res.user.name}! 🎉`, "success", 3000);
-
-        // Redirect into the app
         setTimeout(goToProfile, 600);
       });
 
@@ -231,7 +224,6 @@
 
     function showErrors(errors) {
       if (!errors) return;
-      // Map logical keys → actual element ids in the HTML
       const idMap = {
         form: "formErr",
         name: "nameErr",
