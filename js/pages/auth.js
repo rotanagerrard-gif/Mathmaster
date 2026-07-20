@@ -7,17 +7,49 @@
   const MM = (window.MM = window.MM || {});
   const { $, $$, escapeHtml } = MM;
 
+  function goToProfile() {
+    const dest =
+      MM.ui && typeof MM.ui.navHref === "function"
+        ? MM.ui.navHref("pages/profile.html")
+        : "profile.html";
+    // replace() so Back doesn't return to the auth form
+    window.location.replace(dest);
+  }
+
+  function safePlay(name) {
+    try {
+      if (MM.sound && MM.sound.play) MM.sound.play(name);
+    } catch (_) {}
+  }
+
+  function safeConfetti(n) {
+    try {
+      if (MM.ui && MM.ui.confetti) MM.ui.confetti(n);
+    } catch (_) {}
+  }
+
+  function safeToast(msg, type, ms) {
+    try {
+      if (MM.toast) MM.toast(msg, type, ms);
+      else if (MM.ui && MM.ui.toast) MM.ui.toast(msg, type, ms);
+    } catch (_) {}
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     // if already logged in, redirect away
-    if (MM.auth.isLoggedIn()) {
-      MM.toast("You're already signed in.", "info", 1500);
-      setTimeout(() => (location.href = MM.ui.navHref("pages/profile.html")), 700);
+    if (MM.auth && MM.auth.isLoggedIn()) {
+      safeToast("You're already signed in.", "info", 1500);
+      setTimeout(goToProfile, 500);
       return;
     }
 
-    // icons
-    const ei = $("#emailIcon"); if (ei) ei.innerHTML = MM.icon("mail");
-    const pi = $("#passIcon"); if (pi) pi.innerHTML = MM.icon("user");
+    // icons (optional)
+    try {
+      const ei = $("#emailIcon");
+      if (ei && MM.icon) ei.innerHTML = MM.icon("mail");
+      const pi = $("#passIcon");
+      if (pi && MM.icon) pi.innerHTML = MM.icon("user");
+    } catch (_) {}
 
     const loginForm = $("#loginForm");
     const registerForm = $("#registerForm");
@@ -26,40 +58,60 @@
     if (loginForm) {
       loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        e.stopPropagation();
         clearErrors();
-        const email = $("#email").value;
-        const password = $("#password").value;
-        const res = MM.auth.login({ email, password });
-        if (!res.ok) {
-          showErrors(res.errors);
-          MM.sound.play("wrong");
+        const email = ($("#email") || {}).value || "";
+        const password = ($("#password") || {}).value || "";
+        let res;
+        try {
+          res = MM.auth.login({ email, password });
+        } catch (err) {
+          console.error("login error", err);
+          safeToast("Login failed. Please try again.", "error");
           return;
         }
-        MM.sound.play("success");
-        MM.ui.confetti(50);
-        MM.toast(`Welcome back, ${res.user.name}! 👋`, "success");
-        setTimeout(() => (location.href = MM.ui.navHref("pages/profile.html")), 900);
+        if (!res || !res.ok) {
+          showErrors((res && res.errors) || { form: "Login failed." });
+          safePlay("wrong");
+          return;
+        }
+        safePlay("success");
+        safeConfetti(50);
+        safeToast(`Welcome back, ${res.user.name}! 👋`, "success");
+        setTimeout(goToProfile, 700);
       });
 
       $("#demoBtn")?.addEventListener("click", () => {
-        const res = MM.auth.loginDemo("student");
-        MM.sound.play("success");
-        MM.toast(`Signed in as ${res.user.name}`, "success");
-        setTimeout(() => (location.href = MM.ui.navHref("pages/profile.html")), 700);
+        try {
+          const res = MM.auth.loginDemo("student");
+          safePlay("success");
+          safeToast(`Signed in as ${res.user.name}`, "success");
+          setTimeout(goToProfile, 500);
+        } catch (err) {
+          console.error(err);
+          safeToast("Demo login failed.", "error");
+        }
       });
       $("#demoAdminBtn")?.addEventListener("click", () => {
-        const res = MM.auth.loginDemo("admin");
-        MM.sound.play("success");
-        MM.toast("Signed in as Admin Demo", "success");
-        setTimeout(() => (location.href = MM.ui.navHref("pages/profile.html")), 700);
+        try {
+          MM.auth.loginDemo("admin");
+          safePlay("success");
+          safeToast("Signed in as Admin Demo", "success");
+          setTimeout(goToProfile, 500);
+        } catch (err) {
+          console.error(err);
+          safeToast("Demo login failed.", "error");
+        }
       });
       $("#forgotLink")?.addEventListener("click", (e) => {
         e.preventDefault();
-        MM.ui.modal({
-          title: "Reset Password",
-          body: `<p>This is a demo platform — password reset isn't implemented. Use a demo account or register a new one.</p>`,
-          actions: [{ label: "Got it", variant: "primary", onClick: ({ close }) => close() }],
-        });
+        if (MM.ui && MM.ui.modal) {
+          MM.ui.modal({
+            title: "Reset Password",
+            body: `<p>This is a demo platform — password reset isn't implemented. Use a demo account or register a new one.</p>`,
+            actions: [{ label: "Got it", variant: "primary", onClick: ({ close }) => close() }],
+          });
+        }
       });
     }
 
@@ -69,74 +121,130 @@
       const pw = $("#password");
       const bar = $("#strengthBar");
       const txt = $("#strengthTxt");
-      pw.addEventListener("input", () => {
-        const v = pw.value;
-        if (!v) { bar.style.display = "none"; txt.textContent = ""; return; }
-        bar.style.display = "";
-        let score = 0;
-        if (v.length >= 6) score++;
-        if (v.length >= 10) score++;
-        if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
-        if (/\d/.test(v)) score++;
-        if (/[^A-Za-z0-9]/.test(v)) score++;
-        const pct = (score / 5) * 100;
-        const fill = bar.querySelector(".bar");
-        fill.style.width = pct + "%";
-        const labels = ["Very weak", "Weak", "Okay", "Good", "Strong", "Excellent"];
-        const colors = ["var(--danger)", "var(--danger)", "var(--warning)", "var(--warning)", "var(--success)", "var(--success)"];
-        fill.style.background = colors[score];
-        txt.textContent = labels[score];
-        txt.style.color = colors[score];
-      });
+      if (pw && bar && txt) {
+        pw.addEventListener("input", () => {
+          const v = pw.value;
+          if (!v) {
+            bar.style.display = "none";
+            txt.textContent = "";
+            return;
+          }
+          bar.style.display = "";
+          let score = 0;
+          if (v.length >= 6) score++;
+          if (v.length >= 10) score++;
+          if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+          if (/\d/.test(v)) score++;
+          if (/[^A-Za-z0-9]/.test(v)) score++;
+          const pct = (score / 5) * 100;
+          const fill = bar.querySelector(".bar");
+          if (fill) {
+            fill.style.width = pct + "%";
+            const colors = [
+              "var(--danger)",
+              "var(--danger)",
+              "var(--warning)",
+              "var(--warning)",
+              "var(--success)",
+              "var(--success)",
+            ];
+            fill.style.background = colors[score];
+          }
+          const labels = ["Very weak", "Weak", "Okay", "Good", "Strong", "Excellent"];
+          txt.textContent = labels[score];
+          txt.style.color = colors[score];
+        });
+      }
 
       registerForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        e.stopPropagation();
         clearErrors();
+
         const data = {
-          name: $("#name").value,
-          email: $("#email").value,
-          password: $("#password").value,
+          name: ($("#name") || {}).value || "",
+          email: ($("#email") || {}).value || "",
+          password: ($("#password") || {}).value || "",
         };
-        const password2 = $("#password2").value;
-        const terms = $("#terms").checked;
+        const password2 = ($("#password2") || {}).value || "";
+        const termsEl = $("#terms");
+        const terms = termsEl ? !!termsEl.checked : false;
 
         if (data.password !== password2) {
-          $("#pass2Err").textContent = "Passwords do not match.";
-          MM.sound.play("wrong");
+          const el = $("#pass2Err");
+          if (el) el.textContent = "Passwords do not match.";
+          safePlay("wrong");
+          safeToast("Passwords do not match.", "error");
           return;
         }
         if (!terms) {
-          $("#termsErr").textContent = "Please accept the terms to continue.";
-          MM.sound.play("wrong");
+          const el = $("#termsErr");
+          if (el) el.textContent = "Please accept the terms to continue.";
+          safePlay("wrong");
+          safeToast("Please accept the terms to continue.", "error");
           return;
         }
-        const res = MM.auth.register(data);
-        if (!res.ok) {
-          showErrors(res.errors);
-          MM.sound.play("wrong");
+
+        let res;
+        try {
+          res = MM.auth.register(data);
+        } catch (err) {
+          console.error("register error", err);
+          safeToast("Registration failed. Please try again.", "error");
           return;
         }
-        MM.sound.play("success");
-        MM.ui.confetti(100);
-        MM.toast(`Welcome to MathMaster, ${res.user.name}! 🎉`, "success", 3500);
-        setTimeout(() => (location.href = MM.ui.navHref("pages/profile.html")), 1100);
+
+        if (!res || !res.ok) {
+          showErrors((res && res.errors) || { form: "Registration failed." });
+          safePlay("wrong");
+          return;
+        }
+
+        // SUCCESS: session already set inside MM.auth.register()
+        // UI effects are optional — never block redirect
+        safePlay("success");
+        safeConfetti(80);
+        safeToast(`Welcome to MathMaster, ${res.user.name}! 🎉`, "success", 3000);
+
+        // Redirect into the app
+        setTimeout(goToProfile, 600);
       });
 
       $("#demoBtn")?.addEventListener("click", () => {
-        const res = MM.auth.loginDemo("student");
-        MM.toast(`Signed in as ${res.user.name}`, "success");
-        setTimeout(() => (location.href = MM.ui.navHref("pages/profile.html")), 700);
+        try {
+          const res = MM.auth.loginDemo("student");
+          safeToast(`Signed in as ${res.user.name}`, "success");
+          setTimeout(goToProfile, 500);
+        } catch (err) {
+          console.error(err);
+          safeToast("Demo login failed.", "error");
+        }
       });
     }
 
     function clearErrors() {
-      $$(".field-error").forEach((e) => (e.textContent = ""));
+      try {
+        if ($$) $$(".field-error").forEach((e) => (e.textContent = ""));
+        else document.querySelectorAll(".field-error").forEach((e) => (e.textContent = ""));
+      } catch (_) {}
     }
+
     function showErrors(errors) {
+      if (!errors) return;
+      // Map logical keys → actual element ids in the HTML
+      const idMap = {
+        form: "formErr",
+        name: "nameErr",
+        email: "emailErr",
+        password: "passErr",
+        password2: "pass2Err",
+        terms: "termsErr",
+      };
       Object.entries(errors).forEach(([k, v]) => {
-        const el = $("#" + (k === "form" ? "formErr" : k + "Err"));
-        if (el) el.textContent = v;
-        if (k !== "form") MM.toast(v, "error", 2500);
+        const id = idMap[k] || k + "Err";
+        const node = document.getElementById(id);
+        if (node) node.textContent = v;
+        if (k !== "form") safeToast(v, "error", 2800);
       });
     }
   });
