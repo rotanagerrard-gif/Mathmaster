@@ -101,7 +101,6 @@
       search.setAttribute("aria-label", MM.t("nav.search"));
     }
 
-    // Footer tagline paragraph (first p inside footer brand column)
     const tagline = document.querySelector(".footer-grid > div > p");
     if (tagline) tagline.textContent = MM.t("footer.tagline");
 
@@ -109,11 +108,18 @@
   }
 
   function initGlobal() {
+    // CRITICAL: page scripts call MM.toast() but toast lives on MM.ui
+    if (MM.ui && typeof MM.ui.toast === "function") {
+      MM.toast = function (msg, type, ms) {
+        return MM.ui.toast(msg, type, ms);
+      };
+    }
+
     // restore session
     MM.auth.restore();
     // seed demo accounts (so leaderboard is populated)
     seedDemo();
-    // apply theme (theme.init also wires toggles, called again by buildNav)
+    // apply theme
     MM.theme.init();
     // mount nav + footer + reveal-on-scroll
     MM.ui.mount(pageName());
@@ -123,7 +129,6 @@
     ensureI18n(() => localizeChrome());
     // hide page loader
     window.addEventListener("load", () => MM.ui.hidePageLoader());
-    // safety: hide loader after 2.5s no matter what
     setTimeout(() => MM.ui.hidePageLoader(), 2500);
 
     // keyboard shortcut: "/" focuses nav search
